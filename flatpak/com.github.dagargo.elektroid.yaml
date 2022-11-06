@@ -1,0 +1,31 @@
+---
+app-id: com.github.dagargo.elektroid
+command: elektroid
+runtime-version: "22.08"
+runtime: org.freedesktop.Platform
+sdk: org.freedesktop.Sdk
+
+finish-args:
+  # We need MIDI and USB access.
+  - --device=all
+
+  # Needed to talk with X11, Wayland, pulseaudio and pipewire
+  - --share=ipc
+  - --filesystem=xdg-run/pipewire-0
+  - --socket=pulseaudio
+  - --socket=x11
+
+modules:
+  - name: "libzip"
+    buildsystem: cmake
+    sources:
+      - type: archive
+        url: https://libzip.org/download/libzip-1.9.2.tar.xz
+        sha256: c93e9852b7b2dc931197831438fee5295976ee0ba24f8524a8907be5c2ba5937
+  - name: "elektroid"
+    sources:
+      - type: git
+        url: https://github.com/dagargo/elektroid
+      - type: shell
+        commands:
+        - autoreconf -ivf
